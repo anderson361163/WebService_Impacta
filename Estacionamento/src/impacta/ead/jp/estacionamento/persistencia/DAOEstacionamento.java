@@ -15,6 +15,26 @@ import impacta.ead.jp.estacionamento.utilitario.EstacionamentoUtil;
  */
 public class DAOEstacionamento {
 
+	public double getFaturamentoCorrente() {
+		Connection conexao = getConnection();
+		String cmd = EstacionamentoUtil.get("selectSituacaoAtual");
+		
+		try (PreparedStatement pStmt = conexao.prepareStatement(cmd)) {
+			ResultSet result = pStmt.executeQuery();
+
+			if (result.next()) {
+				double faturamento = result.getDouble(1);
+				return faturamento;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(conexao);
+		}
+
+		return 0;
+	}
+
 	public int getVagasOcupadas() {
 		Connection conexao = getConnection();
 		String cmd = EstacionamentoUtil.get("selectOcupadas");
